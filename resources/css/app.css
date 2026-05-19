@@ -1,0 +1,392 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --gold: #c9a84c;
+        --dark: #1a1a18;
+        --cream: #f5f0e8;
+        --mid: #2e2e2a;
+        --gray: #8a8880;
+    }
+
+    html {
+        color-scheme: light;
+        scroll-behavior: smooth;
+        /* Fixed header clears in-page anchors and scroll-snap targets */
+        scroll-padding-top: 7.5rem;
+    }
+
+    @media (min-width: 768px) {
+        html {
+            scroll-padding-top: 8.75rem;
+        }
+    }
+
+    body {
+        @apply bg-cream text-dark font-sans antialiased;
+        /* Mobile defense: prevent rogue absolute children from creating a horizontal scrollbar. */
+        overflow-x: clip;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    /* Mobile tap targets + prevent iOS zoom-on-focus for form controls. */
+    @media (max-width: 639px) {
+        .btn {
+            @apply min-h-[44px] px-5;
+        }
+        input[type='text'],
+        input[type='email'],
+        input[type='tel'],
+        input[type='search'],
+        input[type='url'],
+        input[type='number'],
+        input[type='password'],
+        textarea,
+        select {
+            font-size: 16px;
+        }
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    ::selection {
+        background: rgba(201, 168, 76, 0.35);
+    }
+
+    a {
+        @apply transition-colors duration-200;
+    }
+}
+
+@layer components {
+    .label {
+        @apply text-gray uppercase tracking-label text-xs;
+    }
+
+    /** Consistent vertical rhythm — tightens space on mobile, opens up on desktop. */
+    .section-pad {
+        @apply py-14 sm:py-16 md:py-20;
+    }
+
+    .section-pad-tight {
+        @apply py-10 sm:py-12 md:py-16;
+    }
+
+    /** Responsive editorial type — hero headlines. */
+    .h-display {
+        @apply font-display leading-[0.96] tracking-tight;
+        font-size: clamp(2.4rem, 8.5vw, 4.5rem);
+    }
+
+    /** Section headers (h2). */
+    .h-section {
+        @apply font-display leading-[1.05] tracking-tight text-[1.85rem] sm:text-3xl md:text-4xl;
+    }
+
+    /** Card padding that breathes well on every screen. */
+    .card-pad {
+        @apply p-6 sm:p-7 md:p-8;
+    }
+
+    .container-wide {
+        @apply mx-auto w-full max-w-7xl;
+        /* Respect iPhone notch / home indicator without shrinking desktop padding */
+        padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+        padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+    }
+
+    @media (min-width: 640px) {
+        .container-wide {
+            padding-left: max(2rem, env(safe-area-inset-left, 0px));
+            padding-right: max(2rem, env(safe-area-inset-right, 0px));
+        }
+    }
+
+    /** Very light paper grain — reads “studio book” vs flat contractor beige */
+    .grain-soft {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+    }
+
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition duration-300;
+    }
+
+    .btn-gold {
+        @apply bg-gold text-dark hover:bg-cream;
+    }
+
+    .btn-outline {
+        @apply border border-cream/70 text-cream hover:bg-cream hover:text-dark;
+    }
+
+    .btn-dark-outline {
+        @apply border border-dark/20 text-dark hover:bg-dark hover:text-cream;
+    }
+
+    .card {
+        @apply rounded-2xl bg-white/70 backdrop-blur border border-dark/10;
+    }
+
+    /** Press / partner tiles — homepage strip & about recognition */
+    .partner-tile {
+        @apply relative flex flex-col rounded-2xl border border-dark/10 bg-white/80 shadow-[0_2px_28px_rgba(26,26,24,0.05)] backdrop-blur transition duration-300 ease-out;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .partner-tile:hover {
+            @apply -translate-y-0.5 border-gold/40 shadow-[0_16px_48px_rgba(26,26,24,0.1)];
+        }
+    }
+
+    .partner-tile__logo-wrap {
+        @apply flex h-14 w-full items-center justify-start rounded-xl border border-dark/[0.06] bg-cream/60 px-3;
+    }
+
+    .partner-tile__mark {
+        @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gold/30 bg-gradient-to-br from-gold/15 to-cream font-display text-sm tracking-tight text-dark;
+    }
+
+    .partner-tile__logo {
+        @apply max-h-10 w-auto max-w-full object-contain object-left opacity-95 transition duration-300;
+    }
+
+    .partner-tile__name {
+        @apply text-[0.9375rem] font-medium leading-snug tracking-normal text-dark [overflow-wrap:anywhere];
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .group:hover .partner-tile__logo {
+            @apply opacity-100;
+        }
+    }
+
+    /** Trusted-by logo wall (homepage partners) */
+    .partners-trust__grid {
+        @apply grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 sm:gap-x-10 sm:gap-y-12 md:grid-cols-4 lg:grid-cols-5;
+    }
+
+    .partners-trust__logo-img {
+        @apply mx-auto max-h-10 w-auto max-w-[9.5rem] object-contain opacity-65 grayscale transition duration-300 ease-out;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .partners-trust__cell:hover .partners-trust__logo-img {
+            @apply opacity-100 grayscale-0;
+        }
+    }
+
+    .partners-trust__category {
+        @apply mt-3 text-center text-[11px] font-medium capitalize tracking-wide text-dark/45 sm:text-xs;
+    }
+
+    .kamali-pagination__bar {
+        @apply flex flex-col gap-4 border-t border-dark/10 pt-8 sm:gap-5;
+    }
+
+    .kamali-pagination--public .kamali-pagination__bar {
+        @apply border-dark/10;
+    }
+
+    .kamali-pagination__summary {
+        @apply text-sm text-dark/65 tabular-nums;
+    }
+
+    .kamali-pagination--admin .kamali-pagination__bar {
+        @apply sm:flex-row sm:flex-wrap sm:items-center sm:justify-between;
+    }
+
+    .kamali-pagination__per-page {
+        @apply flex items-center gap-2 sm:order-2;
+    }
+
+    .kamali-pagination__nav {
+        @apply flex flex-wrap items-center justify-center gap-1.5 sm:justify-end sm:gap-2;
+    }
+
+    .kamali-pagination--admin .kamali-pagination__nav {
+        @apply w-full sm:order-3 sm:w-auto;
+    }
+
+    .kamali-pagination__pages {
+        @apply items-center gap-1.5 px-1;
+    }
+
+    .kamali-pagination__mobile-indicator {
+        @apply inline-flex min-w-[5.5rem] items-center justify-center rounded-full border border-dark/10 bg-white/70 px-3 py-2 text-sm text-dark/70;
+    }
+
+    .noise {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+    }
+
+    .prose-project p + p {
+        @apply mt-5;
+    }
+
+    .gallery-mosaic-img {
+        @apply transition duration-[650ms] ease-out will-change-transform;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .group:hover .gallery-mosaic-img {
+            transform: scale(1.045);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .gallery-mosaic-img {
+            transition: none;
+        }
+    }
+}
+
+@layer utilities {
+    .fade-up {
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 900ms cubic-bezier(0.2, 0.8, 0.2, 1),
+            transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .fade-up.is-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .overlay-gradient {
+        background: linear-gradient(
+            180deg,
+            rgba(26, 26, 24, 0.25) 0%,
+            rgba(26, 26, 24, 0.75) 55%,
+            rgba(26, 26, 24, 0.92) 100%
+        );
+    }
+
+    @keyframes floaty {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .anim-floaty {
+        animation: floaty 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse-soft {
+        0%,
+        100% {
+            opacity: 0.55;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
+
+    .pulse-soft {
+        animation: pulse-soft 1.8s ease-in-out infinite;
+    }
+
+    /**
+     * Soft fade between pages — short enough that hover-prefetch makes the
+     * subsequent paint feel instant. No sliding wipe (that one added ~500ms
+     * of perceived latency on every click).
+     */
+    .transition-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9998;
+        pointer-events: none;
+        background: rgba(26, 26, 24, 0.4);
+        opacity: 0;
+        transition: opacity 160ms ease-out;
+    }
+
+    .transition-overlay.is-on {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .transition-overlay {
+            transition: none;
+            display: none !important;
+        }
+    }
+
+    .notch-pill {
+        position: relative;
+        border-radius: 9999px;
+        background: rgba(245, 240, 232, 0.92);
+        color: rgba(26, 26, 24, 0.92);
+        border: 1px solid rgba(26, 26, 24, 0.1);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+        backdrop-filter: blur(10px);
+    }
+
+    .notch-pill::before,
+    .notch-pill::after {
+        content: '';
+        position: absolute;
+        bottom: -14px;
+        width: 34px;
+        height: 34px;
+        border-radius: 9999px;
+        background: transparent;
+        box-shadow: 0 -18px 0 0 rgba(245, 240, 232, 0.92);
+    }
+
+    .notch-pill::before {
+        left: 18px;
+    }
+
+    .notch-pill::after {
+        right: 18px;
+    }
+
+    .nav-link {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.1rem;
+        transition: color 220ms ease;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -0.2rem;
+        height: 1px;
+        background: rgba(201, 168, 76, 0.95);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 260ms ease;
+        opacity: 0.8;
+    }
+
+    .nav-link:hover::after {
+        transform: scaleX(1);
+    }
+
+    .nav-link.is-active::after {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    .nav-kbd-focus:focus-visible {
+        outline: 2px solid rgba(201, 168, 76, 0.75);
+        outline-offset: 3px;
+        border-radius: 9999px;
+    }
+}
