@@ -162,6 +162,7 @@ Without SSH, some hosts allow symlinks in File Manager; otherwise uploaded files
 
 | Problem | Fix |
 |--------|-----|
+| Composer “requires php >=8.4” on Symfony | Pull latest `main` — lock file targets PHP **8.2**. Then `composer install --no-dev` (do not run `composer update` on the server unless needed) |
 | 500 error | Check `storage/logs/laravel.log`; set `storage` + `bootstrap/cache` writable |
 | CSS/JS missing | Run `npm run build` locally; upload `public/build/` |
 | `/admin` 404 | Enable `mod_rewrite`; ensure `.htaccess` exists in `public/` |
