@@ -250,6 +250,7 @@ Verify: `https://yourdomain.com/storage/projects/covers/SOME_FILE.jpg`
 
 | Problem | Fix |
 |--------|-----|
+| **500 Internal Server Error** | SSH: `bash scripts/hostinger/repair.sh` then `bash scripts/hostinger/show-log.sh`. Usually: missing `APP_KEY`, wrong MySQL in `.env`, or `php artisan migrate` not run. Use `.env.hostinger.example` as a template |
 | **403 Forbidden** | See [Fix 403 Forbidden](#fix-403-forbidden) above |
 | Images 404 on server | Run `bash scripts/hostinger/link-storage.sh`; upload `storage/app/public` from Mac |
 | Composer “requires php >=8.4” | Pull latest `main`; run `composer install --no-dev` only |
