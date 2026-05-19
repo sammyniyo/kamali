@@ -4,14 +4,15 @@ Repo: https://github.com/sammyniyo/kamali.git
 
 ## Before you start
 
-On your **Mac** (build assets once — shared hosting often has no Node):
+On your **Mac** before deploy (`public/build` is in Git for Hostinger):
 
 ```bash
 cd /Users/user/Documents/kamali
 npm run build
+git add public/build && git commit -m "Build assets" && git push
 ```
 
-You will upload `public/build/` to the server if npm is not available there.
+**500 “Vite manifest not found”** → `public/build/` missing. Run `git pull` on the server, or `bash scripts/pack-build.sh` and unzip `kamali-build.zip` into `public/`.
 
 In **hPanel**:
 

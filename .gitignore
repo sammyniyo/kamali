@@ -1,7 +1,7 @@
 /.phpunit.cache
 /node_modules
-/public/build
 /public/hot
+# public/build is committed so Hostinger (no npm) gets CSS/JS via git pull
 /public/storage
 /storage/*.key
 /storage/pail

@@ -10,6 +10,14 @@ PHP_BIN="${PHP_BIN:-php}"
 echo "→ App root: $ROOT"
 echo "→ PHP: $($PHP_BIN -v | head -1)"
 
+if [[ ! -f public/build/manifest.json ]]; then
+    echo ""
+    echo "ERROR: Missing public/build/manifest.json (causes 500)."
+    echo "  On your Mac: npm run build && git push"
+    echo "  Or: bash scripts/pack-build.sh, upload kamali-build.zip, unzip in public/"
+    exit 1
+fi
+
 if [[ ! -f .env ]]; then
     echo "ERROR: .env missing"
     exit 1
