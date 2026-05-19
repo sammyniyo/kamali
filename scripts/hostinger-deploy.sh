@@ -42,8 +42,8 @@ else
     echo "WARN: npm not found. Build on your Mac (npm run build) and upload public/build/ via FTP."
 fi
 
-echo "→ artisan"
-$PHP_BIN artisan storage:link --force 2>/dev/null || true
+echo "→ storage (link or copy for shared hosting)"
+bash scripts/hostinger/link-storage.sh
 $PHP_BIN artisan migrate --force
 $PHP_BIN artisan config:cache
 $PHP_BIN artisan route:cache

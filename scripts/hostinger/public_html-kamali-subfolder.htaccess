@@ -1,5 +1,5 @@
-# Place this file in public_html when the Laravel app lives in public_html/kamali/
-# (one folder below public_html). Adjust "kamali" if your folder name differs.
+# Use when Laravel is in public_html/kamali/ (sibling of this .htaccess in public_html).
+# Copy to: public_html/.htaccess
 
 <IfModule mod_rewrite.c>
     Options +FollowSymLinks -MultiViews -Indexes

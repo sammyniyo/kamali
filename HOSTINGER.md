@@ -158,11 +158,85 @@ Without SSH, some hosts allow symlinks in File Manager; otherwise uploaded files
 
 ---
 
+## Fix 403 Forbidden
+
+Hostinger’s web root is `public_html`. Laravel must serve from the **`public`** folder.
+
+### Check your layout
+
+**A) Git deployed into `public_html` (whole project)**
+
+```
+public_html/
+  app/
+  public/          ← web requests must end up here
+  vendor/
+  ...
+```
+
+Copy `scripts/hostinger/public_html-laravel-in-root.htaccess` → `public_html/.htaccess`
+
+**B) Project in `public_html/kamali/`**
+
+Copy `scripts/hostinger/public_html-kamali-subfolder.htaccess` → `public_html/.htaccess`
+
+**C) Best: change document root in hPanel**
+
+Set document root to:
+
+```
+/home/u123456789/kamali/public
+```
+
+(or `.../public_html/public` if the app lives in `public_html`)
+
+### Permissions (SSH)
+
+```bash
+find storage bootstrap/cache -type d -exec chmod 775 {} \;
+find storage bootstrap/cache -type f -exec chmod 664 {} \;
+chmod 755 public
+```
+
+### Quick test
+
+Upload `scripts/hostinger/diagnostic.php` to `public_html/diagnostic.php`, open  
+`https://yourdomain.com/diagnostic.php` — then **delete the file**.
+
+---
+
+## Uploads (images) from your Mac
+
+Uploads live in `storage/app/public/` — **not in Git**. Local admin uploads are not on the server until you copy them.
+
+**On your Mac:**
+
+```bash
+cd /Users/user/Documents/kamali
+bash scripts/pack-uploads.sh
+```
+
+Upload `kamali-uploads.zip` to the server, then **SSH**:
+
+```bash
+cd ~/kamali   # app root (adjust path)
+unzip -o kamali-uploads.zip -d storage/app/public/
+bash scripts/hostinger/link-storage.sh
+```
+
+`link-storage.sh` creates `public/storage` (symlink or copy if Hostinger blocks symlinks).
+
+Verify: open `https://yourdomain.com/storage/projects/covers/SOME_FILE.jpg`
+
+---
+
 ## Troubleshooting
 
 | Problem | Fix |
 |--------|-----|
-| Composer “requires php >=8.4” on Symfony | Pull latest `main` — lock file targets PHP **8.2**. Then `composer install --no-dev` (do not run `composer update` on the server unless needed) |
+| **403 Forbidden** | See [Fix 403 Forbidden](#fix-403-forbidden) above |
+| Images 404 on server | Run `bash scripts/hostinger/link-storage.sh`; upload `storage/app/public` from Mac |
+| Composer “requires php >=8.4” | Pull latest `main`; run `composer install --no-dev` only |
 | 500 error | Check `storage/logs/laravel.log`; set `storage` + `bootstrap/cache` writable |
 | CSS/JS missing | Run `npm run build` locally; upload `public/build/` |
 | `/admin` 404 | Enable `mod_rewrite`; ensure `.htaccess` exists in `public/` |
