@@ -1,0 +1,7 @@
+# Place this file in public_html when the Laravel app lives in public_html/kamali/
+# (one folder below public_html). Adjust "kamali" if your folder name differs.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ kamali/public/$1 [L]
+</IfModule>
