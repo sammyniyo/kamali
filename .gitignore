@@ -7,6 +7,8 @@
 /storage/pail
 /vendor
 .env
+kamali-uploads.zip
+kamali-build.zip
 .env.backup
 .env.production
 .phpactor.json
