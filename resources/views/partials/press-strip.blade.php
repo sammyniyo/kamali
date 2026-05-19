@@ -2,10 +2,10 @@
     use App\Models\Partner;
     use App\Support\StudioStats;
 
-    $partners = Partner::query()
-        ->visible()
-        ->orderBy('sort_order')
-        ->get();
+    $partners = \App\Support\SafeQuery::collection(
+        'partners',
+        fn () => Partner::query()->visible()->orderBy('sort_order')->get()
+    );
 
     $partnerCount = $partners->count();
     $countries = StudioStats::countriesReached();

@@ -228,7 +228,10 @@
             </div>
 
             @php
-                $recent = \App\Models\Project::query()->orderByDesc('year')->orderBy('sort_order')->limit(3)->get();
+                $recent = \App\Support\SafeQuery::collection(
+                    'projects',
+                    fn () => \App\Models\Project::query()->orderByDesc('year')->orderBy('sort_order')->limit(3)->get()
+                );
             @endphp
             <div class="mt-8 grid gap-6 sm:gap-7 md:mt-10 md:grid-cols-2 lg:grid-cols-3">
                 @if ($recent->isEmpty())
@@ -288,7 +291,10 @@
             <h2 class="mt-2 h-section text-dark" data-animate="fade-up">Team</h2>
 
             @php
-                $team = \App\Models\TeamMember::query()->orderBy('sort_order')->limit(5)->get();
+                $team = \App\Support\SafeQuery::collection(
+                    'team_members',
+                    fn () => \App\Models\TeamMember::query()->orderBy('sort_order')->limit(5)->get()
+                );
             @endphp
 
             @if ($team->isEmpty())
@@ -443,7 +449,10 @@
             <h2 class="mt-2 h-section text-dark" data-animate="fade-up">Insights</h2>
 
             @php
-                $cases = \App\Models\Project::query()->orderByDesc('featured')->orderByDesc('year')->limit(3)->get();
+                $cases = \App\Support\SafeQuery::collection(
+                    'projects',
+                    fn () => \App\Models\Project::query()->orderByDesc('featured')->orderByDesc('year')->limit(3)->get()
+                );
             @endphp
             @if ($cases->isEmpty())
                 <x-empty-state

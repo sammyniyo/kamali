@@ -37,8 +37,9 @@ rm -f bootstrap/cache/config.php bootstrap/cache/routes-v7.php bootstrap/cache/e
 echo "→ Permissions"
 chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 
-echo "→ Database migrate"
+echo "→ Database migrate + seed"
 $PHP_BIN artisan migrate --force
+$PHP_BIN artisan db:seed --force
 
 echo "→ Storage"
 $PHP_BIN scripts/hostinger/link-storage.php

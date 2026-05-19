@@ -14,9 +14,20 @@ class StudioStats
     public static function forHomepage(): array
     {
         $years = max(1, (int) date('Y') - (int) config('kamali.founded_year', 2010));
-        $projects = Project::query()->where('status', 'finished')->count();
+
+        $projects = SafeQuery::run(
+            'projects',
+            fn () => Project::query()->where('status', 'finished')->count(),
+            0
+        );
+
         $countries = self::countriesReached();
-        $recognition = Partner::query()->visible()->count();
+
+        $recognition = SafeQuery::run(
+            'partners',
+            fn () => Partner::query()->visible()->count(),
+            0
+        );
         if ($recognition === 0) {
             $recognition = count(config('kamali.recognition', []));
         }
@@ -47,11 +58,13 @@ class StudioStats
 
     public static function countriesReached(): int
     {
-        $fromProjects = Project::query()
-            ->whereNotNull('location')
-            ->where('location', '!=', '')
-            ->pluck('location')
-            ->map(fn (string $location) => self::countryFromLocation($location))
+        $fromProjects = SafeQuery::collection(
+            'projects',
+            fn () => Project::query()
+                ->whereNotNull('location')
+                ->where('location', '!=', '')
+                ->pluck('location')
+        )->map(fn (string $location) => self::countryFromLocation($location))
             ->filter();
 
         $home = trim((string) config('kamali.address.country', ''));
