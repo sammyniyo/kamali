@@ -13,11 +13,27 @@ if [[ ! -d "$SRC" ]]; then
     exit 1
 fi
 
+COUNT=$(find "$SRC" -type f ! -name '.gitignore' | wc -l | tr -d ' ')
+if [[ "$COUNT" -eq 0 ]]; then
+    echo "ERROR: No uploaded files in $SRC (only .gitignore?)."
+    echo "Upload images in admin on your Mac first, then run this script again."
+    exit 1
+fi
+
 cd "$SRC"
-zip -r "$OUT" . -x "*.DS_Store"
-echo "Created: $OUT"
+zip -r "$OUT" . -x "*.DS_Store" ".gitignore"
+SIZE=$(du -h "$OUT" | cut -f1)
+
+echo "Created: $OUT ($SIZE, $COUNT files)"
 echo ""
-echo "On Hostinger (SSH):"
-echo "  cd ~/kamali   # your app root"
+echo "On Hostinger — upload the zip to your APP ROOT (folder with artisan), then SSH:"
+echo ""
+echo "  cd ~/domains/YOUR_DOMAIN/public_html    # or wherever artisan lives"
+echo "  unzip -o kamali-uploads.zip -d public/storage/"
+echo ""
+echo "Or if using storage/app/public:"
 echo "  unzip -o kamali-uploads.zip -d storage/app/public/"
-echo "  bash scripts/hostinger/link-storage.sh"
+echo "  php scripts/hostinger/link-storage.php"
+echo ""
+echo "Add to .env on server (recommended, no symlinks needed):"
+echo "  FILESYSTEM_PUBLIC_ROOT=/home/u736264619/domains/YOUR_DOMAIN/public_html/public/storage"

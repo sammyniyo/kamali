@@ -40,7 +40,9 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            // On Hostinger (no symlinks / exec disabled), set in .env:
+            // FILESYSTEM_PUBLIC_ROOT=/home/USER/domains/site.com/public_html/public/storage
+            'root' => env('FILESYSTEM_PUBLIC_ROOT', storage_path('app/public')),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,

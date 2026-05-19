@@ -216,17 +216,33 @@ cd /Users/user/Documents/kamali
 bash scripts/pack-uploads.sh
 ```
 
-Upload `kamali-uploads.zip` to the server, then **SSH**:
+Check the script prints **file count > 0** and zip size ~several MB. If you only see `.gitignore`, you ran it before uploading anything in admin.
+
+Upload `kamali-uploads.zip` to the same folder as `artisan` on Hostinger, then **SSH**:
 
 ```bash
-cd ~/kamali   # app root (adjust path)
-unzip -o kamali-uploads.zip -d storage/app/public/
-bash scripts/hostinger/link-storage.sh
+cd ~/domains/YOUR_DOMAIN/public_html   # your app root
+mkdir -p public/storage
+unzip -o kamali-uploads.zip -d public/storage/
 ```
 
-`link-storage.sh` creates `public/storage` (symlink or copy if Hostinger blocks symlinks).
+**Recommended `.env` on Hostinger** (new uploads go straight to the web folder — no symlinks):
 
-Verify: open `https://yourdomain.com/storage/projects/covers/SOME_FILE.jpg`
+```env
+FILESYSTEM_PUBLIC_ROOT=/home/u736264619/domains/YOUR_DOMAIN/public_html/public/storage
+```
+
+Use your real path from `pwd` + `/public/storage`.
+
+Optional sync from `storage/app/public` if you used that path:
+
+```bash
+php scripts/hostinger/link-storage.php
+```
+
+Do **not** use `php artisan storage:link` — Hostinger disables `exec()` and it will error.
+
+Verify: `https://yourdomain.com/storage/projects/covers/SOME_FILE.jpg`
 
 ---
 
